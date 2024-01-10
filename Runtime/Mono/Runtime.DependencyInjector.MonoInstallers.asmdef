@@ -1,10 +1,10 @@
 {
-    "name": "Editor",
+    "name": "Runtime.DependencyInjector.MonoInstallers",
     "rootNamespace": "",
-    "references": [],
-    "includePlatforms": [
-        "Editor"
+    "references": [
+        "GUID:9f148c0201450ae4e909bfa2f424c839"
     ],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

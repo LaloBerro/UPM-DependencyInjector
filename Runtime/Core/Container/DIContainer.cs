@@ -1,0 +1,73 @@
+using System;
+using System.Collections.Generic;
+
+namespace DependencyInjector.Core
+{
+    public class DIContainer : IDisposable, IDIContainer
+    {
+        private readonly Dictionary<Type, object> _singleInstances = new();
+        private readonly Dictionary<Type, List<object>> _multipleInstances = new();
+
+        public void RegisterAsSingle<TServiceType>(TServiceType serviceInstance)
+        {
+            Type type = typeof(TServiceType);
+
+            if (_singleInstances.ContainsKey(type))
+                throw new Exception("It is already contained");
+            
+            _singleInstances.Add(type, serviceInstance);
+        }
+
+        public void RegisterAsMultiple<TServiceType>(TServiceType serviceInstance)
+        {
+            Type type = typeof(TServiceType);
+
+            _multipleInstances.TryGetValue(type, out List<object> multipleInstancesList);
+            if (ReferenceEquals(null, multipleInstancesList))
+            {
+                multipleInstancesList = new List<object>();
+                _multipleInstances.Add(type, multipleInstancesList);
+            }
+            
+            multipleInstancesList.Add(serviceInstance);
+        }
+
+        public TServiceType Get<TServiceType>()
+        {
+            Type type = typeof(TServiceType);
+            
+            if (_singleInstances.TryGetValue(type, out var singleServiceInstance))
+                 return (TServiceType)singleServiceInstance;
+
+            if (_multipleInstances.TryGetValue(type, out var cachedServiceInstance))
+                return (TServiceType)cachedServiceInstance[0];
+
+            throw new Exception("DIContainer Error: Get can't return because it didn't find: " + type);
+        }
+
+        public object GetObjectByType(Type type)
+        {
+            if (_singleInstances.TryGetValue(type, out var singleServiceInstance))
+                return singleServiceInstance;
+
+            if (_multipleInstances.TryGetValue(type, out var cachedServiceInstance))
+                return cachedServiceInstance[0];
+
+            throw new Exception("DIContainer Error: GetObjectByType can't return because it didn't find: " + type);
+        }
+
+        public object[] GetArrayByType(Type type)
+        {
+            if(_multipleInstances.TryGetValue(type, out var cachedServiceInstanceArray))
+                return cachedServiceInstanceArray.ToArray();
+            
+            throw new Exception("DIContainer Error: GetCachedArrayByType can't return because it didn't find: " + type);
+        }
+
+        public void Dispose()
+        {
+            _singleInstances.Clear();
+            _multipleInstances.Clear();
+        }
+    }
+}
