@@ -1,3 +1,2 @@
-# Unity Package Template
+# Introduction
 
-This is a template for an empty unity package
