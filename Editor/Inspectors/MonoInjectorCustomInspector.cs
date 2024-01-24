@@ -13,6 +13,9 @@ namespace DependencyInjectorEditor
 
             if (GUILayout.Button("Use Children"))
                 FillInstallerUsingChild();
+            
+            if (GUILayout.Button("Open Dependency Graph"))
+                DependencyGraphWindow.OpenDependencyGraphWindow();
         }
 
         private void FillInstallerUsingChild()
