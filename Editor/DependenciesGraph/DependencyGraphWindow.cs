@@ -47,7 +47,8 @@ namespace DependencyInjectorEditor
 
             if (ReferenceEquals(_dependenciesGraphView, null))
                 InitDependencyGraph();
-
+            
+            _dependenciesGraphView.DeleteElements(_dependenciesGraphView.graphElements);
             _dependenciesGraphView.SetMonoInjector(_monoInjector);
         }
 

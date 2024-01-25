@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using DependencyInjector.Installers;
 using DependencyInjector.Tests.BaseClasses;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.Profiling;
 using UnityEngine.TestTools;
 
 namespace DependencyInjector.PlayMode
@@ -91,6 +93,43 @@ namespace DependencyInjector.PlayMode
             
             //Act
             injectorsInitializer.InjectAll();
+            
+            //Assert
+            bool isInjected = injectionTestSingleMonoInstaller.ServiceInstance.IsInjected();
+            Assert.IsTrue(isInjected);
+
+            yield return null;
+        }
+        
+        
+        [UnityTest]
+        public IEnumerator InjectMultipleAndProfileIt_CheckProfiler()
+        {
+            //Arrange
+            MonoInstaller<ArrayInjectionTest> injectionTestSingleMonoInstaller = new GameObject("ArrayInjectionTestSingleMonoInstaller").AddComponent<ArrayInjectionTestSingleMonoInstaller>();
+            MonoInstaller<IInjectThis> injectThisMultipleMonoInstaller = new GameObject("InjectThisMultipleMonoInstaller").AddComponent<InjectThisMultipleMonoInstaller>();
+            MonoInjector monoInjector = new GameObject("MonoInjector").AddComponent<MonoInjector>();
+            List<MonoInstaller> monoInstallers = new List<MonoInstaller>();
+
+            int totalLoopTimes = 1000;
+            for (int i = 0; i < totalLoopTimes; i++)
+            {
+                monoInstallers.Add(injectThisMultipleMonoInstaller);
+            }
+            
+            monoInstallers.Add(injectionTestSingleMonoInstaller);
+
+            monoInjector.SetInstallers(monoInstallers.ToArray());
+            
+            //Act
+            
+            yield return new WaitForSeconds(3f);
+            
+            Profiler.BeginSample("InjectorProfile");
+            monoInjector.InjectAll();
+            Profiler.EndSample();
+
+            yield return new WaitForSeconds(3f);
             
             //Assert
             bool isInjected = injectionTestSingleMonoInstaller.ServiceInstance.IsInjected();
