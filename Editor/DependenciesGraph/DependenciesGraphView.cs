@@ -46,9 +46,9 @@ namespace DependencyInjectorEditor
                 Type currentType = installer.GetType();
                 while (true)
                 {
-                    MethodInfo[] methodInfos = installer.GetType().GetMethods(BindingFlags.NonPublic | BindingFlags.Instance |
-                                                                              BindingFlags.DeclaredOnly | BindingFlags.Default |
-                                                                              BindingFlags.Public);
+                    MethodInfo[] methodInfos = currentType.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance |
+                                                                      BindingFlags.DeclaredOnly | BindingFlags.Default |
+                                                                      BindingFlags.Public);
                     foreach (var methodInfo in methodInfos)
                     {
                         if (methodInfo.Name.Equals("GetData"))
