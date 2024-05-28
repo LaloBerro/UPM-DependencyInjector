@@ -62,6 +62,9 @@ namespace DependencyInjectorEditor
                         break;
 
                     currentType = currentType.BaseType;
+                    
+                    if(ReferenceEquals(currentType, null) || currentType == typeof(MonoBehaviour))
+                        break;
                 }
                 
                 string typeName = getDataMethod.ReturnType.Name;
