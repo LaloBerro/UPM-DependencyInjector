@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
+using UnityEngine;
 
 namespace DependencyInjector.Core
 {
@@ -7,7 +9,20 @@ namespace DependencyInjector.Core
     {
         public void Inject(IDIContainer diContainer, object objectToSetInjections)
         {
-            FieldInfo[] fields = objectToSetInjections.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
+            List<FieldInfo> fields = new List<FieldInfo>();
+
+            Type currentType = objectToSetInjections.GetType();
+            while (true)
+            {
+                FieldInfo[] fieldInfos = currentType.GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
+                
+                fields.AddRange(fieldInfos);
+
+                currentType = currentType.BaseType;
+                
+                if(ReferenceEquals(currentType, null) || currentType == typeof(MonoBehaviour))
+                    break;
+            }
 
             foreach (var fieldInfo in fields)
             {

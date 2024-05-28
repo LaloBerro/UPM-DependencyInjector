@@ -42,11 +42,29 @@ namespace DependencyInjectorEditor
 
             foreach (var installer in installers)
             {
-                MethodInfo[] methodInfos = installer.GetType().GetMethods(BindingFlags.NonPublic | BindingFlags.Instance |
-                                                                          BindingFlags.DeclaredOnly | BindingFlags.Default |
-                                                                          BindingFlags.Public);
+                MethodInfo getDataMethod = null;
+                Type currentType = installer.GetType();
+                while (true)
+                {
+                    MethodInfo[] methodInfos = installer.GetType().GetMethods(BindingFlags.NonPublic | BindingFlags.Instance |
+                                                                              BindingFlags.DeclaredOnly | BindingFlags.Default |
+                                                                              BindingFlags.Public);
+                    foreach (var methodInfo in methodInfos)
+                    {
+                        if (methodInfo.Name.Equals("GetData"))
+                        {
+                            getDataMethod = methodInfo;
+                            break;
+                        }
+                    }
 
-                string typeName = methodInfos[0].ReturnType.Name;
+                    if (!ReferenceEquals(getDataMethod, null))
+                        break;
+
+                    currentType = currentType.BaseType;
+                }
+                
+                string typeName = getDataMethod.ReturnType.Name;
 
                 string installerName = installer.gameObject.name;
                 installerName = installerName.Replace("Installer", "");
