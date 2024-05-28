@@ -154,7 +154,21 @@ namespace DependencyInjectorEditor
         private static NodeDependencies GetNodeDependencies(MonoInstaller installer, string typeName, Node node)
         {
             HashSet<string> dependenciesNames = new HashSet<string>();
-            FieldInfo[] fields = installer.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
+            
+            List<FieldInfo> fields = new List<FieldInfo>();
+
+            Type currentType = installer.GetType();
+            while (true)
+            {
+                FieldInfo[] fieldInfos = currentType.GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
+                
+                fields.AddRange(fieldInfos);
+
+                currentType = currentType.BaseType;
+                
+                if(ReferenceEquals(currentType, null) || currentType == typeof(MonoBehaviour))
+                    break;
+            }
 
             foreach (var fieldInfo in fields)
             {

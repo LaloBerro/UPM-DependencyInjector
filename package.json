@@ -1,6 +1,6 @@
 {
   "name": "com.lalo.dependencyinjector",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "displayName": "DependencyInjector",
   "unity": "2020.3",
   "unityRelease": "0b5",
