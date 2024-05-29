@@ -5,7 +5,7 @@ namespace DependencyInjector.Installers
     public class AwakeInjector : MonoBehaviour
     {
         [Header("References")] 
-        [SerializeField] private MonoInjector _monoInjector;
+        [SerializeField] private BaseMonoInjector _monoInjector;
         
         private void Awake()
         {
