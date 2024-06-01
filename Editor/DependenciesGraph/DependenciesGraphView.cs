@@ -69,18 +69,27 @@ namespace DependencyInjectorEditor
                 }
                 
                 string typeName = getDataMethod.ReturnType.Name;
+                string displayTypeName = typeName;
+                
+                Type[] genericTypesArguments = getDataMethod.ReturnType.GetGenericArguments();
+                
+                if (genericTypesArguments != null && genericTypesArguments.Length > 0)
+                {
+                    displayTypeName = typeName.Remove(typeName.Length - 2);
+                    displayTypeName += "<" + genericTypesArguments[0].Name + ">";
+                }
 
                 string installerName = installer.gameObject.name;
                 installerName = installerName.Replace("Installer", "");
 
-                string nodeName = "<b>" + typeName + "</b>";
+                string nodeName = "<b>" + displayTypeName + "</b>";
 
                 if (getDataMethod.ReturnType.IsInterface)
-                    nodeName = "<b><color=#dbfc03>" + typeName + "</color></b>";
+                    nodeName = "<b><color=#dbfc03>" + displayTypeName + "</color></b>";
                 if (getDataMethod.ReturnType.IsAbstract && getDataMethod.ReturnType.IsClass)
-                     nodeName = "<b><color=#435bd1>" + typeName + "</color></b>";
+                     nodeName = "<b><color=#435bd1>" + displayTypeName + "</color></b>";
                 
-                if(!string.Equals(typeName, installerName))
+                if(!string.Equals(displayTypeName, installerName))
                     nodeName += "\n" + installerName;
                 
                 DependencyNode dependencyNodeElement = CreateDependencyNode(nodeName);
