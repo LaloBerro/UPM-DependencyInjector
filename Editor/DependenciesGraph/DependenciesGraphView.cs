@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using DependencyInjector.Core;
 using DependencyInjector.Installers;
+using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -73,13 +74,19 @@ namespace DependencyInjectorEditor
                 installerName = installerName.Replace("Installer", "");
 
                 string nodeName = "<b>" + typeName + "</b>";
+
+                if (getDataMethod.ReturnType.IsInterface)
+                    nodeName = "<b><color=#dbfc03>" + typeName + "</color></b>";
+                if (getDataMethod.ReturnType.IsAbstract && getDataMethod.ReturnType.IsClass)
+                     nodeName = "<b><color=#435bd1>" + typeName + "</color></b>";
+                
                 if(!string.Equals(typeName, installerName))
-                    nodeName += ":\n" + installerName;
+                    nodeName += "\n" + installerName;
                 
                 DependencyNode dependencyNodeElement = CreateDependencyNode(nodeName);
                 dependencyNodeElement.SetPosition(position);
-                position.position += new Vector2(-150, 100);
-
+                position.position += new Vector2(-150 , 100);
+                
                 AddElement(dependencyNodeElement);
 
                 _visualElements.Add(dependencyNodeElement);
@@ -93,7 +100,9 @@ namespace DependencyInjectorEditor
         
         private DependencyNode CreateDependencyNode(string nodeName)
         {
-            DependencyNode dependencyNode = new DependencyNode();
+            VisualTreeAsset uiFile = Resources.Load<VisualTreeAsset>("DependencyNode");
+            string path = AssetDatabase.GetAssetPath(uiFile);
+            DependencyNode dependencyNode = new DependencyNode(path);
             dependencyNode.title = nodeName;
             dependencyNode.Text = nodeName;
             dependencyNode.GUID = Guid.NewGuid().ToString();
@@ -147,6 +156,11 @@ namespace DependencyInjectorEditor
             
             edge.input.Connect(edge);
             edge.output.Connect(edge);
+            
+            edge.input.styleSheets.Add(Resources.Load<StyleSheet>("Port"));
+            edge.output.styleSheets.Add(Resources.Load<StyleSheet>("Port"));
+            
+            edge.styleSheets.Add(Resources.Load<StyleSheet>("Edge"));
             
             Add(edge);
         }

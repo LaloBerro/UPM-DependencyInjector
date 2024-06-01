@@ -1,0 +1,3 @@
+Port {
+    --port-color: rgba(135, 39, 245, 0.8);
+}

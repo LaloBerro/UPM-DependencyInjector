@@ -1,0 +1,5 @@
+Edge {
+    --edge-color: rgba(135, 39, 245, 0.8);
+    --selected-edge-color: rgba(135, 39, 245, 0.8);
+    --ghost-edge-color: rgba(135, 39, 245, 0.8);
+}
