@@ -68,10 +68,10 @@ namespace DependencyInjectorEditor
                         break;
                 }
                 
-                string typeName = getDataMethod.ReturnType.Name;
+                string typeName = getDataMethod?.ReturnType.Name;
                 string displayTypeName = typeName;
                 
-                Type[] genericTypesArguments = getDataMethod.ReturnType.GetGenericArguments();
+                Type[] genericTypesArguments = getDataMethod?.ReturnType.GetGenericArguments();
                 
                 if (genericTypesArguments != null && genericTypesArguments.Length > 0)
                 {
@@ -84,10 +84,10 @@ namespace DependencyInjectorEditor
 
                 string nodeName = "<b>" + displayTypeName + "</b>";
 
-                if (getDataMethod.ReturnType.IsInterface)
+                if (!ReferenceEquals(getDataMethod, null) && getDataMethod.ReturnType.IsInterface)
                     nodeName = "<b><color=#dbfc03>" + displayTypeName + "</color></b>";
-                if (getDataMethod.ReturnType.IsAbstract && getDataMethod.ReturnType.IsClass)
-                     nodeName = "<b><color=#435bd1>" + displayTypeName + "</color></b>";
+                else if (!ReferenceEquals(getDataMethod, null) && getDataMethod.ReturnType.IsAbstract && getDataMethod.ReturnType.IsClass)
+                    nodeName = "<b><color=#435bd1>" + displayTypeName + "</color></b>";
                 
                 if(!string.Equals(displayTypeName, installerName))
                     nodeName += "\n" + installerName;
