@@ -155,6 +155,15 @@ namespace DependencyInjectorEditor
                     }
                 }
             }
+
+            foreach (var nodeDependency in _nodeDependencies)
+            {
+                if(!nodeDependency.NodeData.outputContainer[0].Q<Port>().connected)
+                    nodeDependency.NodeData.outputContainer.RemoveAt(0);
+                
+                if(!nodeDependency.NodeData.inputContainer[0].Q<Port>().connected)
+                    nodeDependency.NodeData.inputContainer.RemoveAt(0);
+            }
         }
         
         private void LinkNodes(Port output, Port input)
