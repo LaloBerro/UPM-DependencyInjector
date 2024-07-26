@@ -24,6 +24,8 @@ namespace DependencyInjectorEditor
             MonoInstaller[] monoInstallers = monoInjector.GetComponentsInChildren<MonoInstaller>();
 
             monoInjector.SetInstallers(monoInstallers);
+            
+            EditorUtility.SetDirty(monoInjector);
         }
     }
 }
