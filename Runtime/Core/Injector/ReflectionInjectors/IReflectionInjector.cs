@@ -2,6 +2,6 @@
 {
     public interface IReflectionInjector
     {
-        void Inject(IDIContainer diContainer, object objectToSetInjections);
+        void Inject(IDIContainer[] diContainers, object objectToSetInjections);
     }
 }

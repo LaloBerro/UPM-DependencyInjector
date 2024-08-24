@@ -7,23 +7,37 @@ namespace DependencyInjector.Core
 {
     public class FieldsReflectionInjector : IReflectionInjector
     {
-        public void Inject(IDIContainer diContainer, object objectToSetInjections)
+        private IDIContainer[] _diContainers;
+        
+        public void Inject(IDIContainer[] diContainers, object objectToSetInjections)
+        {
+            _diContainers = diContainers;
+            List<FieldInfo> fields = GetFields(objectToSetInjections);
+
+            SetFields(objectToSetInjections, fields);
+        }
+        
+        private List<FieldInfo> GetFields(object objectToSetInjections)
         {
             List<FieldInfo> fields = new List<FieldInfo>();
-
             Type currentType = objectToSetInjections.GetType();
             while (true)
             {
                 FieldInfo[] fieldInfos = currentType.GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
-                
+
                 fields.AddRange(fieldInfos);
 
                 currentType = currentType.BaseType;
-                
-                if(ReferenceEquals(currentType, null) || currentType == typeof(MonoBehaviour))
+
+                if (ReferenceEquals(currentType, null) || currentType == typeof(MonoBehaviour))
                     break;
             }
 
+            return fields;
+        }
+        
+        private void SetFields(object objectToSetInjections, List<FieldInfo> fields)
+        {
             foreach (var fieldInfo in fields)
             {
                 object attribute = fieldInfo.GetCustomAttribute<InjectAttribute>();
@@ -31,29 +45,55 @@ namespace DependencyInjector.Core
                 if (ReferenceEquals(attribute, null))
                     continue;
 
-                SetFieldValue(diContainer, objectToSetInjections, fieldInfo);
+                SetFieldValue(objectToSetInjections, fieldInfo);
             }
         }
 
-        private void SetFieldValue(IDIContainer diContainer, object objectToSetInjections, FieldInfo fieldInfo)
+        private void SetFieldValue(object objectToSetInjections, FieldInfo fieldInfo)
         {
             Type type = fieldInfo.FieldType;
 
             if (type.IsArray)
             {
-                Type elementType = type.GetElementType();
-                object[] fieldValue = diContainer.GetArrayByType(elementType);
-
-                Array destinationArray = Array.CreateInstance(elementType, fieldValue.Length);
-                Array.Copy(fieldValue, destinationArray, fieldValue.Length);
-
-                fieldInfo.SetValue(objectToSetInjections, destinationArray);
-
+                SetArrayField(objectToSetInjections, fieldInfo, type);
                 return;
             }
 
-            object value = diContainer.GetObjectByType(type);
+            object value = GetFieldByElementType(type);
             fieldInfo.SetValue(objectToSetInjections, value);
+        }
+
+        private void SetArrayField(object objectToSetInjections, FieldInfo fieldInfo, Type type)
+        {
+            Type elementType = type.GetElementType();
+            object[] fieldValue = GetFieldsByElementType(elementType);
+
+            Array destinationArray = Array.CreateInstance(elementType, fieldValue.Length);
+            Array.Copy(fieldValue, destinationArray, fieldValue.Length);
+
+            fieldInfo.SetValue(objectToSetInjections, destinationArray);
+        }
+
+        private object[] GetFieldsByElementType(Type elementType)
+        {
+            foreach (var diContainer in _diContainers)
+            {
+                if (diContainer.IsTypeContained(elementType))
+                    return diContainer.GetArrayByType(elementType);
+            }
+
+            throw new Exception("FieldsReflectionInjector Error: GetCachedArrayByType can't return because it doesn't exist: " + elementType);
+        }
+        
+        private object GetFieldByElementType(Type elementType)
+        {
+            foreach (var diContainer in _diContainers)
+            {
+                if (diContainer.IsTypeContained(elementType))
+                    return diContainer.GetObjectByType(elementType);
+            }
+
+            throw new Exception("FieldsReflectionInjector Error: GetCachedArrayByType can't return because it doesn't exist: " + elementType);
         }
     }
 }

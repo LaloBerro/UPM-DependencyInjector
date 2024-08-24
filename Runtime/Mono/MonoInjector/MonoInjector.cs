@@ -8,6 +8,7 @@ namespace DependencyInjector.Installers
     {
         [Header("References")] 
         [SerializeField] private MonoInstaller[] _monoInstallers;
+        [SerializeField] private BaseMonoInjector[] _monoInjectors; 
 
         public void SetInstallers(MonoInstaller[] monoInstallers)
         {
@@ -16,10 +17,16 @@ namespace DependencyInjector.Installers
         
         public override void InjectAll()
         {
-            IDIContainer diContainer = new DIContainer();
+            _diContainer = new DIContainer();
+            
+            IDIContainer[] diContainers = new IDIContainer[_monoInjectors.Length];
+            for (var index = 0; index < _monoInjectors.Length; index++)
+            {
+                diContainers[index] = _monoInjectors[index].DiContainer;
+            }
 
             IReflectionInjector[] reflectionInjectors = { new FieldsReflectionInjector() };
-            Injector injector = new Injector(_monoInstallers, diContainer, reflectionInjectors);
+            Injector injector = new Injector(_monoInstallers, _diContainer, reflectionInjectors, diContainers);
             
             injector.InjectAll();
         }

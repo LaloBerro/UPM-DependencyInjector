@@ -64,6 +64,11 @@ namespace DependencyInjector.Core
             throw new Exception("DIContainer Error: GetCachedArrayByType can't return because it didn't find: " + type);
         }
 
+        public bool IsTypeContained(Type type)
+        {
+            return _singleInstances.ContainsKey(type) || _multipleInstances.ContainsKey(type);
+        }
+
         public void Dispose()
         {
             _singleInstances.Clear();

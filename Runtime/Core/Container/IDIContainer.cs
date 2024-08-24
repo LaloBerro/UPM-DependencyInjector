@@ -9,5 +9,6 @@ namespace DependencyInjector.Core
         TServiceType Get<TServiceType>();
         object GetObjectByType(Type type);
         object[] GetArrayByType(Type type);
+        bool IsTypeContained(Type elementType);
     }
 }
