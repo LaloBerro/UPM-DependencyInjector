@@ -6,11 +6,8 @@ namespace DependencyInjector.Installers
 {
     public class MonoInjector : BaseMonoInjector
     {
-        [Header("References")] 
         [SerializeField] private MonoInstaller[] _monoInstallers;
         [SerializeField] private BaseMonoInjector[] _monoInjectors;
-        
-        [Header("Config")] 
         [SerializeField] private bool _hasUseGlobalDiContainer;
 
         public void SetInstallers(MonoInstaller[] monoInstallers)

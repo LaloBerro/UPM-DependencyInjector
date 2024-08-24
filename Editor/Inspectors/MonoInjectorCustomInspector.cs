@@ -9,23 +9,131 @@ namespace DependencyInjectorEditor
     {
         public override void OnInspectorGUI()
         {
-            base.OnInspectorGUI();
-
-            if (GUILayout.Button("Use Children"))
-                FillInstallerUsingChild();
-            
-            if (GUILayout.Button("Open Dependency Graph"))
+            if (DrawButton("  Open Dependency Graph", "BlendTree Icon", 15, 30))
                 DependencyGraphWindow.OpenDependencyGraphWindow();
+            
+            DrawProperties();
+        }
+        
+        private bool DrawButton(string title, string iconName, int fontSize, int height)
+        {
+            GUIStyle buttonStyle = new GUIStyle(GUI.skin.button);
+            buttonStyle.fontSize = fontSize;
+            buttonStyle.fontStyle = FontStyle.Bold;
+            Texture icon = EditorGUIUtility.IconContent(iconName).image;
+            GUIContent buttonContent = new GUIContent(title, icon);
+            
+            if (GUILayout.Button(buttonContent, buttonStyle, GUILayout.Height(height)))
+            {
+                return true;
+            }
+
+            return false;
         }
 
-        private void FillInstallerUsingChild()
+        private void DrawProperties()
+        {
+            serializedObject.Update();
+            
+            DrawInstallers();
+            DrawInjectors();
+            DrawSettings();
+            
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        private void DrawInstallers()
+        {
+            string title = "Installers";
+            DrawTitle(title);
+            
+            if (DrawButton("  Load Installers", "d_ol_plus", 12, 20))
+                FillInstallersUsingChildren();
+            
+            EditorGUI.BeginDisabledGroup(true);
+            
+            EditorGUI.indentLevel++;
+            SerializedProperty serializedProperty = serializedObject.FindProperty("_monoInstallers");
+            EditorGUILayout.PropertyField(serializedProperty);
+            
+            EditorGUI.EndDisabledGroup();
+        }
+
+        private void DrawTitle(string title)
+        {
+            GUILayout.Space(10);
+            
+            GUIStyle boldStyle = new GUIStyle(GUI.skin.label);
+            boldStyle.fontSize = 15;
+            boldStyle.fontStyle = FontStyle.Bold;
+            GUILayout.Label(title, boldStyle);
+
+            DrawDivider();
+        }
+
+        private void DrawDivider()
+        {
+            GUIStyle lineStyle = new GUIStyle();
+            lineStyle.normal.background = EditorGUIUtility.whiteTexture;
+            lineStyle.margin = new RectOffset(0, 0, 4, 4);
+            lineStyle.fixedHeight = 1;
+            GUILayout.Box(GUIContent.none, lineStyle, GUILayout.ExpandWidth(true), GUILayout.Height(1));
+        }
+
+        private void FillInstallersUsingChildren()
         {
             MonoInjector monoInjector = (MonoInjector)target;
             MonoInstaller[] monoInstallers = monoInjector.GetComponentsInChildren<MonoInstaller>();
 
+            Undo.RecordObject(monoInjector, "LoadInstallers");
+            
             monoInjector.SetInstallers(monoInstallers);
             
             EditorUtility.SetDirty(monoInjector);
+
+            UpdateChildrenNames();
+        }
+        
+        private void UpdateChildrenNames()
+        {
+            MonoInjector monoInjector = (MonoInjector)target;
+            MonoInstaller[] monoInstallers = monoInjector.GetComponentsInChildren<MonoInstaller>();
+
+            foreach (var monoInstaller in monoInstallers)
+            {
+                if (monoInstaller == null) 
+                    continue;
+                
+                string gameObjectName = monoInstaller.GetType().Name;
+                gameObjectName = gameObjectName.Replace("Installer", "");
+                monoInstaller.gameObject.name = gameObjectName;
+                    
+                EditorUtility.SetDirty(monoInstaller);
+            }
+            
+            EditorUtility.SetDirty(monoInjector);
+        }
+
+        private void DrawInjectors()
+        {
+            string title = "Injectors";
+            DrawTitle(title);
+            
+            GUILayout.Label("Drag others MonoInjectors to use their DiContainers and look references into it");
+
+            
+            SerializedProperty serializedProperty = serializedObject.FindProperty("_monoInjectors");
+            EditorGUILayout.PropertyField(serializedProperty);
+        }
+        
+        private void DrawSettings()
+        {
+            string title = "Settings";
+            DrawTitle(title);
+            
+            EditorGUI.indentLevel--;
+            SerializedProperty serializedProperty = serializedObject.FindProperty("_hasUseGlobalDiContainer");
+            EditorGUILayout.PropertyField(serializedProperty);
         }
     }
 }
