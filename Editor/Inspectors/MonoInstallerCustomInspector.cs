@@ -51,6 +51,7 @@ namespace DependencyInjectorEditor
                     continue;
                 
                 Type type = fieldInfo.FieldType;
+                
                 dependencyTypes.Add(type);
             }
 
@@ -63,7 +64,18 @@ namespace DependencyInjectorEditor
 
             foreach (var typeInfo in dependencyTypes)
             {
-                GUILayout.Label(typeInfo.Name);
+                string typeName = typeInfo.Name;
+                string displayTypeName = typeName;
+                
+                Type[] genericTypesArguments = typeInfo.GetGenericArguments();
+                
+                if (genericTypesArguments != null && genericTypesArguments.Length > 0)
+                {
+                    displayTypeName = typeName.Remove(typeName.Length - 2);
+                    displayTypeName += "<" + genericTypesArguments[0].Name + ">";
+                }
+                
+                GUILayout.Label(displayTypeName);
             }
 
             GUILayout.EndVertical();
