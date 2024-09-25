@@ -1,4 +1,5 @@
-﻿using DependencyInjector.Core;
+﻿using System;
+using DependencyInjector.Core;
 using ServiceLocatorPattern;
 using UnityEngine;
 
@@ -26,9 +27,19 @@ namespace DependencyInjector.Installers
             }
 
             IReflectionInjector[] reflectionInjectors = { new FieldsReflectionInjector() };
+            foreach (var reflectionInjector in reflectionInjectors)
+            {
+                reflectionInjector.OnErrorThrown += ThrowError;
+            }
+            
             Injector injector = new Injector(_monoInstallers, _diContainer, reflectionInjectors, diContainers);
             
             injector.InjectAll();
+        }
+
+        private void ThrowError(string error)
+        {
+            Debug.LogError("Inject Error in: " + gameObject.name + "  |  " + error, gameObject);
         }
 
         private void InitializeDiContainer()

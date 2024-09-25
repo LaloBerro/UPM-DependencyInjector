@@ -8,7 +8,9 @@ namespace DependencyInjector.Core
     public class FieldsReflectionInjector : IReflectionInjector
     {
         private IDIContainer[] _diContainers;
-        
+
+        public Action<string> OnErrorThrown { get; set; }
+
         public void Inject(IDIContainer[] diContainers, object objectToSetInjections)
         {
             _diContainers = diContainers;
@@ -81,8 +83,11 @@ namespace DependencyInjector.Core
                 if (diContainer.IsTypeContained(elementType))
                     return diContainer.GetArrayByType(elementType);
             }
-
-            throw new Exception("FieldsReflectionInjector Error: GetCachedArrayByType can't return because it doesn't exist: " + elementType);
+            
+            string error = "FieldsReflectionInjector Error: GetCachedArrayByType can't return because it doesn't exist: " + elementType;
+            OnErrorThrown?.Invoke(error);
+            
+            throw new Exception(error);
         }
         
         private object GetFieldByElementType(Type elementType)
@@ -93,7 +98,10 @@ namespace DependencyInjector.Core
                     return diContainer.GetObjectByType(elementType);
             }
 
-            throw new Exception("FieldsReflectionInjector Error: GetCachedArrayByType can't return because it doesn't exist: " + elementType);
+            string error = "FieldsReflectionInjector Error: GetCachedArrayByType can't return because it doesn't exist: " + elementType;
+            OnErrorThrown?.Invoke(error);
+            
+            throw new Exception(error);
         }
     }
 }
