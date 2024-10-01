@@ -8,7 +8,7 @@ namespace DependencyInjector.Installers
     {
         public abstract void Install(IDIContainer diContainer);
     }
-    
+
     public abstract class MonoInstaller<TServiceType> : MonoInstaller
     {
         private TServiceType _serviceInstance;
@@ -17,6 +17,14 @@ namespace DependencyInjector.Installers
 
         public override void Install(IDIContainer diContainer)
         {
+            if (TryGetComponent<IInstallSkipChecker>(out IInstallSkipChecker installSkipChecker))
+            {
+                bool hasToSkipInstall = installSkipChecker.HasToSkip();
+
+                if (hasToSkipInstall)
+                    return;
+            }
+            
             _serviceInstance = GetData();
 
             if (ReferenceEquals(ServiceInstance, null))
