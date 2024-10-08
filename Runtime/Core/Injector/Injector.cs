@@ -20,6 +20,9 @@
         {
             foreach (var installer in _installers)
             {
+                if(installer.HasToSkipInstallation())
+                    continue;
+                
                 InjectValues(installer);
                 
                 installer.Install(_mainDiContainer);

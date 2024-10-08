@@ -6,6 +6,15 @@ namespace DependencyInjector.Installers
 {
     public abstract class MonoInstaller : MonoBehaviour, IInstaller
     {
+        public bool HasToSkipInstallation()
+        {
+            if (!TryGetComponent(out IInstallSkipChecker installSkipChecker)) 
+                return false;
+            
+            bool hasToSkipInstall = installSkipChecker.HasToSkip();
+            return hasToSkipInstall;
+        }
+
         public abstract void Install(IDIContainer diContainer);
     }
 
@@ -17,14 +26,6 @@ namespace DependencyInjector.Installers
 
         public override void Install(IDIContainer diContainer)
         {
-            if (TryGetComponent<IInstallSkipChecker>(out IInstallSkipChecker installSkipChecker))
-            {
-                bool hasToSkipInstall = installSkipChecker.HasToSkip();
-
-                if (hasToSkipInstall)
-                    return;
-            }
-            
             _serviceInstance = GetData();
 
             if (ReferenceEquals(ServiceInstance, null))

@@ -98,7 +98,7 @@ namespace DependencyInjector.Core
                     return diContainer.GetObjectByType(elementType);
             }
 
-            string error = "FieldsReflectionInjector Error: GetCachedArrayByType can't return because it doesn't exist: " + elementType;
+            string error = "FieldsReflectionInjector Error: GetFieldByElementType can't return because it doesn't exist: " + elementType;
             OnErrorThrown?.Invoke(error);
             
             throw new Exception(error);

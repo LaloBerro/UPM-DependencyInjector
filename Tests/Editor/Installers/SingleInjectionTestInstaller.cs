@@ -8,6 +8,11 @@ namespace DependencyInjector.EditorTests
         [Inject]
         private IInjectThis _injectThis;
         
+        public bool HasToSkipInstallation()
+        {
+            return false;
+        }
+        
         public void Install(IDIContainer diContainer)
         {
             diContainer.RegisterAsSingle(new InjectionTest(_injectThis));
