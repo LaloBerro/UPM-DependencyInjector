@@ -10,7 +10,7 @@ namespace DependencyInjector.Installers
             if (ServiceLocatorInstance.Instance.IsContained<IDIContainer>())
                 ServiceLocatorInstance.Instance.Remove<IDIContainer>();
             
-            ServiceLocatorInstance.Instance.Add(new DIContainer());
+            ServiceLocatorInstance.Instance.Add<IDIContainer>(new DIContainer());
         }
     }
 }
