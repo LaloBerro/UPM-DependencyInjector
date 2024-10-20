@@ -132,8 +132,11 @@ namespace DependencyInjectorEditor
             DrawTitle(title);
             
             EditorGUI.indentLevel--;
-            SerializedProperty serializedProperty = serializedObject.FindProperty("_hasUseGlobalDiContainer");
+            SerializedProperty serializedProperty = serializedObject.FindProperty("_hasInstallInGlobalDiContainer");
             EditorGUILayout.PropertyField(serializedProperty);
+            
+            SerializedProperty hasToUseGlobalDiContainerSerializedProperty = serializedObject.FindProperty("_hasToUseGlobalDiContainer");
+            EditorGUILayout.PropertyField(hasToUseGlobalDiContainerSerializedProperty);
         }
     }
 }

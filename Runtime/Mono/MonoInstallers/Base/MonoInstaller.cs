@@ -31,7 +31,7 @@ namespace DependencyInjector.Installers
             if (ReferenceEquals(ServiceInstance, null))
                 throw new Exception($"Installer error: The MonoInstaller ${gameObject.name} is null");
 
-            InstallServiceInContainer(diContainer, ServiceInstance);
+            InstallServiceInContainer(diContainer, _serviceInstance);
         }
 
         protected abstract void InstallServiceInContainer(IDIContainer diContainer, TServiceType serviceInstance);
