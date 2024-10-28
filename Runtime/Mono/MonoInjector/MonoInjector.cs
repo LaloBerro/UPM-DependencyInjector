@@ -22,9 +22,13 @@ namespace DependencyInjector.Installers
             InitializeDiContainer();
             
             List<IDIContainer> diContainers = new List<IDIContainer>();
-            for (var index = 0; index < _monoInjectors.Length; index++)
+
+            if (_monoInjectors != null)
             {
-                diContainers.Add(_monoInjectors[index].DiContainer);
+                for (var index = 0; index < _monoInjectors.Length; index++)
+                {
+                    diContainers.Add(_monoInjectors[index].DiContainer);
+                }
             }
             
             if (_hasToUseGlobalDiContainer)
