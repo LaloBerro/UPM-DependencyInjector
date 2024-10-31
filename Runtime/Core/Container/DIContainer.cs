@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace DependencyInjector.Core
 {
-    public class DIContainer : IDisposable, IDIContainer
+    public class DIContainer : IDIContainer
     {
         private readonly Dictionary<Type, object> _singleInstances = new();
         private readonly Dictionary<Type, List<object>> _multipleInstances = new();
@@ -13,7 +13,7 @@ namespace DependencyInjector.Core
             Type type = typeof(TServiceType);
 
             if (_singleInstances.ContainsKey(type))
-                throw new Exception("It is already contained");
+                throw new Exception("It is already contained: " + type.FullName);
             
             _singleInstances.Add(type, serviceInstance);
         }
@@ -71,6 +71,18 @@ namespace DependencyInjector.Core
 
         public void Dispose()
         {
+            foreach (var instanceKV in _singleInstances)
+            {
+                if(instanceKV.Value is IDisposable disposable)
+                    disposable.Dispose();
+            }
+            
+            foreach (var instanceKV in _multipleInstances)
+            {
+                if(instanceKV.Value is IDisposable disposable)
+                    disposable.Dispose();
+            }
+            
             _singleInstances.Clear();
             _multipleInstances.Clear();
         }

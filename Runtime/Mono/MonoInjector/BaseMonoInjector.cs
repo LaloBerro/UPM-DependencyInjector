@@ -9,5 +9,7 @@ namespace DependencyInjector.Installers
         public IDIContainer DiContainer => _diContainer;
         
         public abstract void InjectAll();
+
+        public abstract void Dispose();
     }
 }

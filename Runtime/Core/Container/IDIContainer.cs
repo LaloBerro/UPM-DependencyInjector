@@ -2,7 +2,7 @@
 
 namespace DependencyInjector.Core
 {
-    public interface IDIContainer
+    public interface IDIContainer : IDisposable
     {
         void RegisterAsSingle<TServiceType>(TServiceType serviceInstance);
         void RegisterAsMultiple<TServiceType>(TServiceType serviceInstance);

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DependencyInjector.Core;
 using ServiceLocatorPattern;
 using UnityEngine;
@@ -27,7 +28,11 @@ namespace DependencyInjector.Installers
             {
                 for (var index = 0; index < _monoInjectors.Length; index++)
                 {
-                    diContainers.Add(_monoInjectors[index].DiContainer);
+                    IDIContainer diContainer = _monoInjectors[index].DiContainer;
+                    if(null == diContainer)
+                        throw new Exception("Null DiContainer probably is not installed yet: " + _monoInjectors[index].gameObject.name);
+                    
+                    diContainers.Add(diContainer);
                 }
             }
             
@@ -38,6 +43,12 @@ namespace DependencyInjector.Installers
             foreach (var reflectionInjector in reflectionInjectors)
             {
                 reflectionInjector.OnErrorThrown += ThrowError;
+            }
+
+            foreach (var monoInstaller in _monoInstallers)
+            {
+                if (null == monoInstaller)
+                    Debug.LogError("Null Installer: " + gameObject.name, gameObject);
             }
             
             Injector injector = new Injector(_monoInstallers, _diContainer, reflectionInjectors, diContainers.ToArray());
@@ -56,6 +67,11 @@ namespace DependencyInjector.Installers
                 _diContainer = new DIContainer();
             else
                 _diContainer = ServiceLocatorInstance.Instance.Get<IDIContainer>();
+        }
+        
+        public override void Dispose()
+        {
+            _diContainer.Dispose();
         }
     }
 }

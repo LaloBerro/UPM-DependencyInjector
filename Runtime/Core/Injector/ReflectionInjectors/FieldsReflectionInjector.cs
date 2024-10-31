@@ -94,6 +94,9 @@ namespace DependencyInjector.Core
         {
             foreach (var diContainer in _diContainers)
             {
+                if(null == diContainer)
+                    throw new Exception("DiContainer is null");
+                
                 if (diContainer.IsTypeContained(elementType))
                     return diContainer.GetObjectByType(elementType);
             }

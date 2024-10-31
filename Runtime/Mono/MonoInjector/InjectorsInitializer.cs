@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace DependencyInjector.Installers
 {
@@ -17,6 +18,14 @@ namespace DependencyInjector.Installers
             foreach (var baseMonoInjector in _monoInjectors)
             {
                 baseMonoInjector.InjectAll();
+            }
+        }
+
+        public override void Dispose()
+        {
+            foreach (var baseMonoInjector in _monoInjectors)
+            {
+                baseMonoInjector.Dispose();
             }
         }
     }
