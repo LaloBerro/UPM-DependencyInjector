@@ -8,6 +8,9 @@ namespace DependencyInjector.Installers
         [Header("References")] 
         [SerializeField] private BaseMonoInjector[] _monoInjectors;
         
+        [Header("Debug")]
+        [SerializeField] private bool _isInitialized;
+        
         public void SetInjectors(BaseMonoInjector[] baseMonoInjectors)
         {
             _monoInjectors = baseMonoInjectors;
@@ -23,6 +26,11 @@ namespace DependencyInjector.Installers
 
         public override void Dispose()
         {
+            if (!_isInitialized)
+                return;
+            
+            _isInitialized = false;
+            
             foreach (var baseMonoInjector in _monoInjectors)
             {
                 baseMonoInjector.Dispose();
