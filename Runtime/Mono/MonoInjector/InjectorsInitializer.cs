@@ -18,6 +18,8 @@ namespace DependencyInjector.Installers
         
         public override void InjectAll()
         {
+            _isInitialized = true;
+            
             foreach (var baseMonoInjector in _monoInjectors)
             {
                 baseMonoInjector.InjectAll();
