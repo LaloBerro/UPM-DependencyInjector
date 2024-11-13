@@ -12,5 +12,10 @@ namespace DependencyInjector.Installers
             
             ServiceLocatorInstance.Instance.Add<IDIContainer>(new DIContainer());
         }
+
+        public override void RemoveFromDiContainer(IDIContainer diContainer)
+        {
+            //Don´t remove the dicontainer on destroy.
+        }
     }
 }

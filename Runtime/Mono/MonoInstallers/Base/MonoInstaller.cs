@@ -16,6 +16,11 @@ namespace DependencyInjector.Installers
         }
 
         public abstract void Install(IDIContainer diContainer);
+
+        public virtual void RemoveFromDiContainer(IDIContainer diContainer)
+        {
+            
+        }
     }
 
     public abstract class MonoInstaller<TServiceType> : MonoInstaller
@@ -37,6 +42,11 @@ namespace DependencyInjector.Installers
         protected abstract void InstallServiceInContainer(IDIContainer diContainer, TServiceType serviceInstance);
 
         protected abstract TServiceType GetData();
+
+        public override void RemoveFromDiContainer(IDIContainer diContainer)
+        {
+            diContainer.RemoveService<TServiceType>();
+        }
 
         private void OnDestroy()
         {

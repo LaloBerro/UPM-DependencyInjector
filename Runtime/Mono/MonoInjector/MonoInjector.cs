@@ -73,5 +73,16 @@ namespace DependencyInjector.Installers
         {
             _diContainer.Dispose();
         }
+        
+        private void OnDestroy()
+        {
+            if (!_hasInstallInGlobalDiContainer) 
+                return;
+            
+            foreach (var monoInstaller in _monoInstallers)
+            {
+                monoInstaller.RemoveFromDiContainer(_diContainer);
+            }
+        }
     }
 }

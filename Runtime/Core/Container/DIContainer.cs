@@ -86,5 +86,14 @@ namespace DependencyInjector.Core
             _singleInstances.Clear();
             _multipleInstances.Clear();
         }
+        
+        public void RemoveService<TServiceType>()
+        {
+            Type type = typeof(TServiceType);
+            if(!_singleInstances.ContainsKey(type))
+                throw new Exception("DIContainer Error: Trying to remove a service that does not exists " + type);
+            
+            _singleInstances.Remove(type);
+        }
     }
 }
