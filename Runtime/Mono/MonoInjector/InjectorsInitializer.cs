@@ -18,6 +18,16 @@ namespace DependencyInjector.Installers
         
         public override void InjectAll()
         {
+            if (_isInitialized)
+            {
+                throw new Exception("Injector already initialized");
+            }
+            
+            if (_monoInjectors.Length <= 0)
+            {
+                throw new Exception("Injector is empty");
+            }
+            
             _isInitialized = true;
             
             foreach (var baseMonoInjector in _monoInjectors)
