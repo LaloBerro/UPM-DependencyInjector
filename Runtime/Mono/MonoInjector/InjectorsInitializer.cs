@@ -25,7 +25,7 @@ namespace DependencyInjector.Installers
             
             if (_monoInjectors.Length <= 0)
             {
-                throw new Exception("Injector is empty" + gameObject.name);
+                throw new Exception("Injector is empty: " + gameObject.name);
             }
             
             _isInitialized = true;
