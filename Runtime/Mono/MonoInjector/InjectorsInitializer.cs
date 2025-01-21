@@ -20,12 +20,12 @@ namespace DependencyInjector.Installers
         {
             if (_isInitialized)
             {
-                throw new Exception("Injector already initialized");
+                throw new Exception("Injector already initialized: " + gameObject.name);
             }
             
             if (_monoInjectors.Length <= 0)
             {
-                throw new Exception("Injector is empty");
+                throw new Exception("Injector is empty" + gameObject.name);
             }
             
             _isInitialized = true;
