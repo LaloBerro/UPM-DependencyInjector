@@ -17,13 +17,13 @@ namespace DependencyInjectorEditor
             Selection.activeGameObject = component.gameObject;
         }
         
-        [MenuItem("GameObject/DependencyInjection/MonoInjector", false, 0)]
+        [MenuItem("GameObject/DependencyInjection/MonoInjector", false, 1)]
         private static void CreateMonoInjector()
         {
             CreateNewGameObject<MonoInjector>();
         }
         
-        [MenuItem("GameObject/DependencyInjection/InjectorsInitializer", false, 0)]
+        [MenuItem("GameObject/DependencyInjection/InjectorsInitializer", false, 1)]
         private static void CreateInjectorInitializer()
         {
             CreateNewGameObject<InjectorsInitializer>();
