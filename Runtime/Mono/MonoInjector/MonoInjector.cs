@@ -35,9 +35,6 @@ namespace DependencyInjector.Installers
                     diContainers.Add(diContainer);
                 }
             }
-            
-            if (_hasToUseGlobalDiContainer)
-                diContainers.Add(ServiceLocatorInstance.Instance.Get<IDIContainer>());
 
             IReflectionInjector[] reflectionInjectors = { new FieldsReflectionInjector() };
             foreach (var reflectionInjector in reflectionInjectors)
@@ -45,11 +42,17 @@ namespace DependencyInjector.Installers
                 reflectionInjector.OnErrorThrown += ThrowError;
             }
 
-            foreach (var monoInstaller in _monoInstallers)
+            foreach (MonoInstaller monoInstaller in _monoInstallers)
             {
                 if (null == monoInstaller)
                     Debug.LogError("Null Installer: " + gameObject.name, gameObject);
+                
+                if(monoInstaller.HasToForceUseGlobalInstaller)
+                    _hasToUseGlobalDiContainer = true;
             }
+            
+            if (_hasToUseGlobalDiContainer)
+                diContainers.Add(ServiceLocatorInstance.Instance.Get<IDIContainer>());
             
             Injector injector = new Injector(_monoInstallers, _diContainer, reflectionInjectors, diContainers.ToArray());
             

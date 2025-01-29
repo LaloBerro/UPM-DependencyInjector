@@ -8,6 +8,8 @@ public class ArrayInjectionTestInstaller : IInstaller
         [Inject]
         private IInjectThis[] _injectThisArray;
 
+        public bool HasToForceUseGlobalInstaller { get; }
+
         public bool HasToSkipInstallation()
         {
             return false;

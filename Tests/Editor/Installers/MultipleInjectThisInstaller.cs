@@ -5,6 +5,8 @@ namespace DependencyInjector.EditorTests
 {
     public class MultipleInjectThisInstaller : IInstaller
     {
+        public bool HasToForceUseGlobalInstaller { get; }
+
         public bool HasToSkipInstallation()
         {
             return false;

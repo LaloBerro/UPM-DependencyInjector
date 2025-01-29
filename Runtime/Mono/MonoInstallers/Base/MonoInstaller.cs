@@ -6,6 +6,9 @@ namespace DependencyInjector.Installers
 {
     public abstract class MonoInstaller : MonoBehaviour, IInstaller
     {
+        protected bool _hasToForceUseGlobalInstaller;
+        public bool HasToForceUseGlobalInstaller => _hasToForceUseGlobalInstaller;
+
         public bool HasToSkipInstallation()
         {
             if (!TryGetComponent(out IInstallSkipChecker installSkipChecker)) 
@@ -26,7 +29,6 @@ namespace DependencyInjector.Installers
     public abstract class MonoInstaller<TServiceType> : MonoInstaller
     {
         private TServiceType _serviceInstance;
-
         public TServiceType ServiceInstance => _serviceInstance;
 
         public override void Install(IDIContainer diContainer)

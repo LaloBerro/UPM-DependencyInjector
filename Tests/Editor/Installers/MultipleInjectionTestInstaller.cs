@@ -7,7 +7,9 @@ namespace DependencyInjector.EditorTests
     {
         [Inject]
         private IInjectThis _injectThis;
-        
+
+        public bool HasToForceUseGlobalInstaller { get; }
+
         public bool HasToSkipInstallation()
         {
             return false;
