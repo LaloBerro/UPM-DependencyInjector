@@ -30,7 +30,7 @@ namespace DependencyInjector.Installers
                 {
                     IDIContainer diContainer = _monoInjectors[index].DiContainer;
                     if(null == diContainer)
-                        throw new Exception("Null DiContainer probably is not installed yet: " + _monoInjectors[index].gameObject.name);
+                        throw new Exception("Null DiContainer probably is not installed yet: " + _monoInjectors[index].gameObject.name + "\n It's needed here: " + gameObject.name);
                     
                     diContainers.Add(diContainer);
                 }
