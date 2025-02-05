@@ -79,8 +79,12 @@ namespace DependencyInjector.Core
             
             foreach (var instanceKV in _multipleInstances)
             {
-                if(instanceKV.Value is IDisposable disposable)
-                    disposable.Dispose();
+                List<object> instances = instanceKV.Value;
+                foreach (var instance in instances)
+                {
+                    if(instance is IDisposable disposable)
+                        disposable.Dispose();
+                }
             }
             
             _singleInstances.Clear();
