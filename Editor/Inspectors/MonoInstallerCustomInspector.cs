@@ -65,8 +65,7 @@ namespace DependencyInjectorEditor
                     typeName = "Multiple Installer:";
                 }
             }
-
-
+            
             GUIStyle boldStyle = new GUIStyle(EditorStyles.boldLabel);
             EditorGUILayout.LabelField(typeName, boldStyle);
         }
@@ -76,27 +75,25 @@ namespace DependencyInjectorEditor
             Type type = target.GetType();
 
             Type genericMonoInstallerType = GetGenericMonoInstaller(type, typeof(MonoInstaller<>));
+
+            if (genericMonoInstallerType == null) 
+                return;
             
-            if (genericMonoInstallerType != null)
-            {
-                Type[] genericArguments = genericMonoInstallerType.GetGenericArguments();
+            Type[] genericArguments = genericMonoInstallerType.GetGenericArguments();
 
-                if (genericArguments.Length > 0)
-                {
-                    Type monoInstallerType = genericArguments[0];
+            if (genericArguments.Length <= 0) 
+                return;
+            Type monoInstallerType = genericArguments[0];
 
-                    string className = GetGenericTypeName(monoInstallerType);
+            string className = GetGenericTypeName(monoInstallerType);
                     
-                    GUIStyle boldStyle = new GUIStyle(EditorStyles.boldLabel)
-                    {
-                        normal = { textColor = Color.yellow},
-                        fontSize = 13
-                        
-                    };
+            GUIStyle boldStyle = new GUIStyle(EditorStyles.boldLabel)
+            {
+                normal = { textColor = Color.yellow},
+                fontSize = 12
+            };
 
-                    EditorGUILayout.LabelField(className, boldStyle);
-                }
-            }
+            EditorGUILayout.LabelField(className, boldStyle);
         }
 
         private string GetGenericTypeName(Type type)
