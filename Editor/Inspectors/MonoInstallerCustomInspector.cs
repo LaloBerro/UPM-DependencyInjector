@@ -176,8 +176,7 @@ namespace DependencyInjectorEditor
                 
                 if (genericTypesArguments != null && genericTypesArguments.Length > 0)
                 {
-                    displayTypeName = typeName.Remove(typeName.Length - 2);
-                    displayTypeName += "<" + genericTypesArguments[0].Name + ">";
+                    displayTypeName = GetGenericTypeName(typeInfo);
                 }
                 
                 GUIStyle boldStyle = new GUIStyle(EditorStyles.boldLabel)
