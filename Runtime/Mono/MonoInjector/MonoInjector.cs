@@ -28,6 +28,9 @@ namespace DependencyInjector.Installers
             {
                 for (var index = 0; index < _monoInjectors.Length; index++)
                 {
+                    if(_monoInjectors[index] == null)
+                        throw new Exception("Null Injector" + gameObject.name);
+                    
                     IDIContainer diContainer = _monoInjectors[index].DiContainer;
                     if(null == diContainer)
                         throw new Exception("Null DiContainer probably is not installed yet: " + _monoInjectors[index].gameObject.name + "\n It's needed here: " + gameObject.name);
@@ -55,6 +58,14 @@ namespace DependencyInjector.Installers
                 diContainers.Add(ServiceLocatorInstance.Instance.Get<IDIContainer>());
             
             Injector injector = new Injector(_monoInstallers, _diContainer, reflectionInjectors, diContainers.ToArray());
+
+#if UNITY_EDITOR
+            for (int i = 0; i < diContainers.Count; i++)
+            {
+                if(null == diContainers[i])
+                    throw new Exception("Null DiContainer probably is not installed yet: " + gameObject.name);
+            }
+#endif
             
             injector.InjectAll();
         }

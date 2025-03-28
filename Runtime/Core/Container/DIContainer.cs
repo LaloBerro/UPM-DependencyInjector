@@ -94,10 +94,12 @@ namespace DependencyInjector.Core
         public void RemoveService<TServiceType>()
         {
             Type type = typeof(TServiceType);
-            if(!_singleInstances.ContainsKey(type))
+            if (_singleInstances.ContainsKey(type))
+                _singleInstances.Remove(type);
+            else if(_multipleInstances.ContainsKey(type))
+                _multipleInstances.Remove(type);
+            else 
                 throw new Exception("DIContainer Error: Trying to remove a service that does not exists " + type);
-            
-            _singleInstances.Remove(type);
         }
     }
 }
