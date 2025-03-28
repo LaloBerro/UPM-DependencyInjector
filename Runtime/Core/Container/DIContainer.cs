@@ -98,8 +98,6 @@ namespace DependencyInjector.Core
                 _singleInstances.Remove(type);
             else if(_multipleInstances.ContainsKey(type))
                 _multipleInstances.Remove(type);
-            else 
-                throw new Exception("DIContainer Error: Trying to remove a service that does not exists " + type);
         }
     }
 }
