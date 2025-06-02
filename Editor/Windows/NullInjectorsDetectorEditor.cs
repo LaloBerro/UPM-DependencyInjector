@@ -12,7 +12,7 @@ namespace DependencyInjectorEditor
         [MenuItem("Tools/Null Injectors Detector")]
         public static void ShowWindow()
         {
-            GetWindow(typeof(EditorWindow));
+            GetWindow(typeof(NullInjectorsDetectorEditor));
         }
 
         private void OnGUI()
