@@ -13,6 +13,8 @@ namespace DependencyInjector.Installers
         [SerializeField] private bool _hasInstallInGlobalDiContainer;
         [SerializeField] private bool _hasToUseGlobalDiContainer;
 
+        public MonoInstaller[] MonoInstallers => _monoInstallers;
+
         public void SetInstallers(MonoInstaller[] monoInstallers)
         {
             _monoInstallers = monoInstallers;
@@ -45,7 +47,7 @@ namespace DependencyInjector.Installers
                 reflectionInjector.OnErrorThrown += ThrowError;
             }
 
-            foreach (MonoInstaller monoInstaller in _monoInstallers)
+            foreach (MonoInstaller monoInstaller in MonoInstallers)
             {
                 if (null == monoInstaller)
                     Debug.LogError("Null Installer: " + gameObject.name, gameObject);
@@ -57,7 +59,7 @@ namespace DependencyInjector.Installers
             if (_hasToUseGlobalDiContainer)
                 diContainers.Add(ServiceLocatorInstance.Instance.Get<IDIContainer>());
             
-            Injector injector = new Injector(_monoInstallers, _diContainer, reflectionInjectors, diContainers.ToArray());
+            Injector injector = new Injector(MonoInstallers, _diContainer, reflectionInjectors, diContainers.ToArray());
 
 #if UNITY_EDITOR
             for (int i = 0; i < diContainers.Count; i++)
@@ -93,7 +95,7 @@ namespace DependencyInjector.Installers
             if (!_hasInstallInGlobalDiContainer) 
                 return;
             
-            foreach (var monoInstaller in _monoInstallers)
+            foreach (var monoInstaller in MonoInstallers)
             {
                 monoInstaller.RemoveFromDiContainer(_diContainer);
             }
