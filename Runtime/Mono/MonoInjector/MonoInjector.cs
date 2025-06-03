@@ -28,6 +28,10 @@ namespace DependencyInjector.Installers
         
         public override void InjectAll()
         {
+            bool hasToSkipInstall = HasToSkipInstallation();
+            if(hasToSkipInstall) 
+                return;
+            
             InitializeDiContainer();
             
             List<IDIContainer> diContainers = new List<IDIContainer>();

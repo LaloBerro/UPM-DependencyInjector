@@ -28,6 +28,10 @@ namespace DependencyInjector.Installers
                 throw new Exception("Injector is empty: " + gameObject.name);
             }
             
+            bool hasToSkipInstall = HasToSkipInstallation();
+            if(hasToSkipInstall) 
+                return;
+            
             _isInitialized = true;
             
             foreach (var baseMonoInjector in _monoInjectors)
