@@ -24,6 +24,17 @@ namespace DependencyInjector.Installers
         {
             
         }
+        
+#if UNITY_EDITOR
+        private bool _isInstalled;
+        
+        public bool IsInstalled => _isInstalled;
+        
+        public void SetAsInstalled()
+        {
+            _isInstalled = true;
+        }
+#endif
     }
 
     public abstract class MonoInstaller<TServiceType> : MonoInstaller

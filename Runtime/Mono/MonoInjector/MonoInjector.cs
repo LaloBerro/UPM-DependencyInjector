@@ -14,6 +14,12 @@ namespace DependencyInjector.Installers
         [SerializeField] private bool _hasToUseGlobalDiContainer;
 
         public MonoInstaller[] MonoInstallers => _monoInstallers;
+        
+#if UNITY_EDITOR
+        private bool _isInstalled;
+        
+        public bool IsInstalled => _isInstalled;
+#endif
 
         public void SetInstallers(MonoInstaller[] monoInstallers)
         {
@@ -70,6 +76,8 @@ namespace DependencyInjector.Installers
 #endif
             
             injector.InjectAll();
+
+            _isInstalled = true;
         }
 
         private void ThrowError(string error)

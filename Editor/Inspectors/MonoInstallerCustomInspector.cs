@@ -21,8 +21,10 @@ namespace DependencyInjectorEditor
             DrawInstallerInformation();
 
             base.OnInspectorGUI();
+
+            DrawInstalledBox();
         }
-        
+
         public Type GetGenericMonoInstaller(Type givenType, Type genericType)
         {
             while (givenType != null && givenType != typeof(object))
@@ -211,6 +213,24 @@ namespace DependencyInjectorEditor
             lineStyle.margin = new RectOffset(0, 0, 4, 4);
             lineStyle.fixedHeight = 1;
             GUILayout.Box(GUIContent.none, lineStyle, GUILayout.ExpandWidth(true), GUILayout.Height(1));
+        }
+        
+        private void DrawInstalledBox()
+        {
+            if (!Application.isPlaying) 
+                return;
+            
+            GUILayout.Space(10);
+            
+            MonoInstaller monoInstaller = target as MonoInstaller;
+            bool isInstalled = monoInstaller.IsInstalled;
+            
+            Color color = isInstalled ? Color.green : Color.red;
+            string installedText = isInstalled ? "installed" : "not Installed"; 
+            
+            GUI.color = color;
+            EditorGUILayout.HelpBox("It's " + installedText, MessageType.Info);
+            GUI.color = Color.white;
         }
     }
 }

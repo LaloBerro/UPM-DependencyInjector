@@ -4,6 +4,11 @@
     {
         bool HasToForceUseGlobalInstaller { get; }
         bool HasToSkipInstallation();
-        public void Install(IDIContainer diContainer);
+        void Install(IDIContainer diContainer);
+        
+        #if UNITY_EDITOR
+        bool IsInstalled { get; }
+        void SetAsInstalled();
+        #endif
     }
 }

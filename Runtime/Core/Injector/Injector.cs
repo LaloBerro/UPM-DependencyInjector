@@ -26,6 +26,10 @@
                 InjectValues(installer);
                 
                 installer.Install(_mainDiContainer);
+                
+#if UNITY_EDITOR
+                installer.SetAsInstalled();
+#endif
             }
         }
 

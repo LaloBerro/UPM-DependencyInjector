@@ -16,5 +16,16 @@ namespace DependencyInjector.EditorTests
         {
             diContainer.RegisterAsSingle<IInjectThis>(new InjectThis());
         }
+        
+#if UNITY_EDITOR
+        private bool _isInstalled;
+        
+        public bool IsInstalled => _isInstalled;
+        
+        public void SetAsInstalled()
+        {
+            _isInstalled = true;
+        }
+#endif
     }
 }

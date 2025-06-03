@@ -13,6 +13,7 @@ namespace DependencyInjectorEditor
                 DependencyGraphWindow.OpenDependencyGraphWindow();
             
             DrawProperties();
+            DrawInstalledBox();
         }
         
         private bool DrawButton(string title, string iconName, int fontSize, int height)
@@ -137,6 +138,24 @@ namespace DependencyInjectorEditor
             
             SerializedProperty hasToUseGlobalDiContainerSerializedProperty = serializedObject.FindProperty("_hasToUseGlobalDiContainer");
             EditorGUILayout.PropertyField(hasToUseGlobalDiContainerSerializedProperty);
+        }
+        
+        private void DrawInstalledBox()
+        {
+            if (!Application.isPlaying) 
+                return;
+            
+            GUILayout.Space(10);
+            
+            MonoInjector monoInjector = target as MonoInjector;
+            bool isInstalled = monoInjector.IsInstalled;
+            
+            Color color = isInstalled ? Color.green : Color.red;
+            string installedText = isInstalled ? "installed" : "not Installed"; 
+            
+            GUI.color = color;
+            EditorGUILayout.HelpBox("It's " + installedText, MessageType.Info);
+            GUI.color = Color.white;
         }
     }
 }
