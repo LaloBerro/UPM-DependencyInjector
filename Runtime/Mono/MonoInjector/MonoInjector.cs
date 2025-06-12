@@ -81,7 +81,9 @@ namespace DependencyInjector.Installers
             
             injector.InjectAll();
 
+#if UNITY_EDITOR
             _isInstalled = true;
+#endif
         }
 
         private void ThrowError(string error)
