@@ -1,4 +1,5 @@
-﻿using DependencyInjector.Installers;
+﻿using System.Collections.Generic;
+using DependencyInjector.Installers;
 using UnityEditor;
 using UnityEngine;
 
@@ -73,8 +74,20 @@ namespace DependencyInjectorEditor
         private void FillInjectorsUsingChildren()
         {
             InjectorsInitializer injectorsInitializer = (InjectorsInitializer)target;
-            BaseMonoInjector[] monoInjectors = injectorsInitializer.GetComponentsInChildren<BaseMonoInjector>();
-            injectorsInitializer.SetInjectors(monoInjectors);
+            
+            Undo.RecordObject(injectorsInitializer, "Injector Initializer");
+            
+            Transform root = injectorsInitializer.transform;
+            List<BaseMonoInjector> baseMonoInjects = new List<BaseMonoInjector>();
+            for (int i = 0; i < root.childCount; i++)
+            {
+                BaseMonoInjector injector = root.GetChild(i).GetComponent<BaseMonoInjector>();
+                
+                if(injector != null)
+                    baseMonoInjects.Add(injector);
+            }
+            
+            injectorsInitializer.SetInjectors(baseMonoInjects.ToArray());
             EditorUtility.SetDirty(injectorsInitializer);
         }
     }
