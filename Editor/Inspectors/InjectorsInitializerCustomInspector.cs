@@ -22,10 +22,8 @@ namespace DependencyInjectorEditor
             GUIContent buttonContent = new GUIContent(title, icon);
             
             if (GUILayout.Button(buttonContent, buttonStyle, GUILayout.Height(height)))
-            {
                 return true;
-            }
-
+            
             return false;
         }
 
@@ -82,6 +80,9 @@ namespace DependencyInjectorEditor
             for (int i = 0; i < root.childCount; i++)
             {
                 BaseMonoInjector injector = root.GetChild(i).GetComponent<BaseMonoInjector>();
+
+                if (!injector.gameObject.activeInHierarchy)
+                    continue;
                 
                 if(injector != null)
                     baseMonoInjects.Add(injector);
