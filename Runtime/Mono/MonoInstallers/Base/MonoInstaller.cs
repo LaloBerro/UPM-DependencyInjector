@@ -32,6 +32,9 @@ namespace DependencyInjector.Installers
         
         public void SetAsInstalled()
         {
+            if(_isInstalled)
+                Debug.LogError($"Installer already installed: {gameObject.name}", this);
+            
             _isInstalled = true;
         }
 #endif
