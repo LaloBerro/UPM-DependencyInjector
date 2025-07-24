@@ -22,7 +22,9 @@ namespace DependencyInjector.Installers
 
         public virtual void RemoveFromDiContainer(IDIContainer diContainer)
         {
-            
+#if UNITY_EDITOR
+            Uninstall();
+#endif
         }
         
 #if UNITY_EDITOR
@@ -36,6 +38,11 @@ namespace DependencyInjector.Installers
                 Debug.LogError($"Installer already installed: {gameObject.name}", this);
             
             _isInstalled = true;
+        }
+        
+        public void Uninstall()
+        {
+            _isInstalled = false;
         }
 #endif
     }
@@ -61,6 +68,10 @@ namespace DependencyInjector.Installers
 
         public override void RemoveFromDiContainer(IDIContainer diContainer)
         {
+#if UNITY_EDITOR
+            Uninstall();
+#endif
+            
             diContainer.RemoveService<TServiceType>();
         }
 
