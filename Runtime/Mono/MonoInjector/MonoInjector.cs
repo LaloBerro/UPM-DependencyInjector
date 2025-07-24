@@ -101,6 +101,13 @@ namespace DependencyInjector.Installers
         
         public override void Dispose()
         {
+#if UNITY_EDITOR
+            foreach (var monoInstaller in MonoInstallers)
+            {
+                monoInstaller.Uninstall();
+            }
+#endif
+            
             _diContainer.Dispose();
         }
         
