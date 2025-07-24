@@ -11,6 +11,7 @@ namespace DependencyInjectorEditor
         public override void OnInspectorGUI()
         {
             DrawProperties();
+            DrawInstalledBox();
         }
         
         private bool DrawButton(string title, string iconName, int fontSize, int height)
@@ -90,6 +91,24 @@ namespace DependencyInjectorEditor
             
             injectorsInitializer.SetInjectors(baseMonoInjects.ToArray());
             EditorUtility.SetDirty(injectorsInitializer);
+        }
+        
+        private void DrawInstalledBox()
+        {
+            if (!Application.isPlaying) 
+                return;
+            
+            GUILayout.Space(10);
+            
+            InjectorsInitializer injectorsInitializer = target as InjectorsInitializer;
+            bool isInstalled = injectorsInitializer.IsInitialized;
+            
+            Color color = isInstalled ? Color.green : Color.red;
+            string installedText = isInstalled ? "installed" : "not Installed"; 
+            
+            GUI.color = color;
+            EditorGUILayout.HelpBox("It's " + installedText, MessageType.Info);
+            GUI.color = Color.white;
         }
     }
 }

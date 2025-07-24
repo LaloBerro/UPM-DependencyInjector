@@ -10,7 +10,9 @@ namespace DependencyInjector.Installers
         
         [Header("Debug")]
         [SerializeField] private bool _isInitialized;
-        
+
+        public bool IsInitialized => _isInitialized;
+
         public void SetInjectors(BaseMonoInjector[] baseMonoInjectors)
         {
             _monoInjectors = baseMonoInjectors;
@@ -18,7 +20,7 @@ namespace DependencyInjector.Installers
         
         public override void InjectAll()
         {
-            if (_isInitialized)
+            if (IsInitialized)
             {
                 throw new Exception("Injector already initialized: " + gameObject.name);
             }
@@ -42,7 +44,7 @@ namespace DependencyInjector.Installers
 
         public override void Dispose()
         {
-            if (!_isInitialized)
+            if (!IsInitialized)
                 return;
             
             _isInitialized = false;
