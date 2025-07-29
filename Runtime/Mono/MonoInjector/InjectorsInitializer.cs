@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 #if UNITY_EDITOR
 using System.Diagnostics;
@@ -31,10 +32,17 @@ namespace DependencyInjector.Installers
         {
             if (IsInitialized)
             {
+                
 #if UNITY_EDITOR
-                throw new Exception("Injector already initialized: " + gameObject.name + " | This class was installed by: " + _initializerClass);
+                Debug.LogError("Injector already initialized. Press here to select it", this);
+                
+                StackTrace stackTraceNew = new StackTrace();
+                MethodBase methodBase = stackTraceNew.GetFrame(1)?.GetMethod();
+                string initializerClass = methodBase.DeclaringType.Name;
+                throw new Exception("Injector already initialized: " + gameObject.name + " | This class was installed by: " + _initializerClass + 
+                " ,and now you are trying to initialize it by: " + initializerClass);
 #else
-                throw new Exception("Injector already initialized: " + gameObject.name);
+                Debug.LogError("Injector already initialized: " + gameObject.name);
 #endif
             }
             
