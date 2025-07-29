@@ -43,7 +43,6 @@ namespace DependencyInjectorEditor
             if (DrawButton("  Load Injectors", "d_ol_plus", 12, 20))
                 FillInjectorsUsingChildren();
             
-            
             EditorGUI.indentLevel++;
             SerializedProperty serializedProperty = serializedObject.FindProperty("_monoInjectors");
             EditorGUILayout.PropertyField(serializedProperty);
