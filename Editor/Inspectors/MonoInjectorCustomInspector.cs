@@ -134,10 +134,13 @@ namespace DependencyInjectorEditor
             
             EditorGUI.indentLevel--;
             SerializedProperty serializedProperty = serializedObject.FindProperty("_hasInstallInGlobalDiContainer");
-            EditorGUILayout.PropertyField(serializedProperty);
+            EditorGUILayout.PropertyField(serializedProperty, new GUIContent("Install in Global DIContainer"));
             
             SerializedProperty hasToUseGlobalDiContainerSerializedProperty = serializedObject.FindProperty("_hasToUseGlobalDiContainer");
-            EditorGUILayout.PropertyField(hasToUseGlobalDiContainerSerializedProperty);
+            EditorGUILayout.PropertyField(hasToUseGlobalDiContainerSerializedProperty, new GUIContent("Use Global DIContainer"));
+            
+            SerializedProperty _hasToDisposeGlobalDiContainerSerializedProperty = serializedObject.FindProperty("_hasToDisposeGlobalDiContainer");
+            EditorGUILayout.PropertyField(_hasToDisposeGlobalDiContainerSerializedProperty, new GUIContent("Dispose Global DI Container"));
         }
         
         private void DrawInstalledBox()
