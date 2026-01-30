@@ -12,6 +12,7 @@ namespace DependencyInjector.Installers
         [SerializeField] private BaseMonoInjector[] _monoInjectors;
         [SerializeField] private bool _hasInstallInGlobalDiContainer;
         [SerializeField] private bool _hasToUseGlobalDiContainer;
+        [SerializeField] private bool _hasToDisposeGlobalDiContainer;
 
         public MonoInstaller[] MonoInstallers => _monoInstallers;
         
@@ -113,7 +114,7 @@ namespace DependencyInjector.Installers
         
         private void OnDestroy()
         {
-            if (!_hasInstallInGlobalDiContainer) 
+            if (!_hasInstallInGlobalDiContainer && !_hasToDisposeGlobalDiContainer) 
                 return;
             
             foreach (var monoInstaller in MonoInstallers)
